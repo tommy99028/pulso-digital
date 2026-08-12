@@ -326,6 +326,7 @@ function initParentWindow () {
     })
 
     if (interactionCount === 1) {
+      playAnnoyingSynthMusic()
       registerProtocolHandlers()
       attemptToTakeoverReferrerWindow()
       openWindow()
@@ -746,14 +747,49 @@ function speak (phrase) {
   window.speechSynthesis.speak(new window.SpeechSynthesisUtterance(phrase))
 }
 
+let globalAudioCtx = null
+function getAudioContext () {
+  if (!globalAudioCtx) {
+    globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  }
+  if (globalAudioCtx.state === 'suspended') {
+    globalAudioCtx.resume()
+  }
+  return globalAudioCtx
+}
+
+/**
+ * Play a fast 8-bit synth music loop via Web Audio API.
+ * Guarantees loud music plays even if video audio is blocked by browser policies.
+ */
+function playAnnoyingSynthMusic () {
+  try {
+    const ctx = getAudioContext()
+    const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 587.33, 659.25, 523.25]
+    let step = 0
+    setInterval(() => {
+      if (ctx.state === 'suspended') ctx.resume()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = (step % 2 === 0) ? 'sawtooth' : 'square'
+      osc.frequency.value = notes[step % notes.length]
+      gain.gain.setValueAtTime(0.2, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.18)
+      step++
+    }, 160)
+  } catch (e) {}
+}
+
 /**
  * Start an annoying theramin that changes pitch and volume depending on
- * the mouse position. Uses a Web Audio oscillator. Reauires user-initiated
- * event.
- * Based on https://github.com/feross/TheAnnoyingSite.com/pull/2
+ * the mouse position. Uses a Web Audio oscillator.
  */
 function startTheramin () {
-  const audioContext = new AudioContext()
+  const audioContext = getAudioContext()
   const oscillatorNode = audioContext.createOscillator()
   const gainNode = audioContext.createGain()
 
@@ -773,6 +809,7 @@ function startTheramin () {
   oscillatorNode.start(0)
 
   const oscillator = ({ pitch, volume }) => {
+    if (audioContext.state === 'suspended') audioContext.resume()
     oscillatorNode.frequency.value = pitchBase + pitch * pitchRange
     gainNode.gain.value = volume * 3
   }
