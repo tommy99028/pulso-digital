@@ -301,10 +301,13 @@ function initParentWindow () {
     startPrankChaos()
   }, 3000)
 
-  // OR unleash immediately if they click, scroll, touch, or type before 3 seconds
-  interceptUserInput(event => {
-    unlockAudio()
-    startPrankChaos()
+  // OR unleash immediately if they explicitly click, tap, scroll, or press a key
+  const userActions = ['click', 'touchstart', 'mousedown', 'keydown', 'scroll', 'wheel']
+  userActions.forEach(evt => {
+    window.addEventListener(evt, () => {
+      unlockAudio()
+      startPrankChaos()
+    }, { passive: true })
   })
 }
 
@@ -644,7 +647,7 @@ function unlockAudio () {
  * Intercept all user-initiated events and call the given the function, `onInput`.
  */
 function interceptUserInput (onInput) {
-  const events = ['pointerdown', 'touchstart', 'mousedown', 'mouseup', 'click', 'keydown', 'keypress', 'mousemove', 'wheel', 'scroll']
+  const events = ['pointerdown', 'touchstart', 'mousedown', 'mouseup', 'click', 'keydown', 'keypress', 'scroll', 'wheel']
   events.forEach(evt => {
     window.addEventListener(evt, (e) => {
       unlockAudio()
