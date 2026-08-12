@@ -70,20 +70,18 @@ const SEARCHES = [
 ]
 
 const VIDEOS = [
-  'media/videos/jaczup.mp4',
-  'media/videos/duck.mp4',
   'media/videos/rickroll.mp4',
+  'media/videos/duck.mp4',
+  'media/videos/puddi.mp4',
+  'media/videos/kaczuszka.mp4',
   'media/videos/golomb.mp4',
   'media/videos/mushbox.mp4',
+  'media/videos/jaczup.mp4',
   'media/videos/clearmax.mp4',
   'media/videos/freestrona.mp4',
-  'media/videos/ajhsdfhjasdbhfjasdfs.mp4',
-  'media/videos/v09044g40000cgr968jc77u1t2krb89g.mov',
-  'media/videos/intro.mp4',
-  'media/videos/szybkakaczka.mp4', // added by @dan64iel
-  'media/videos/kaczuszka.mp4', //added by @imzeme
-  'media/videos/gratulacje.mp4', //added by @GameShoot8050
-  'media/videos/puddi.mp4' //added by @MariaWasNotAvailable
+  'media/videos/szybkakaczka.mp4',
+  'media/videos/gratulacje.mp4',
+  'media/videos/intro.mp4'
 ]
 
 const FILE_DOWNLOADS = [
@@ -627,23 +625,37 @@ function startVibrateInterval () {
   })
 }
 
+function unlockAudio () {
+  try {
+    const ctx = getAudioContext()
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume()
+    }
+  } catch (e) {}
+
+  document.querySelectorAll('video').forEach(v => {
+    v.muted = false
+    v.volume = 1.0
+    v.play().catch(() => {})
+  })
+
+  if (!window._synthStarted) {
+    window._synthStarted = true
+    playAnnoyingSynthMusic()
+  }
+}
+
 /**
  * Intercept all user-initiated events and call the given the function, `onInput`.
  */
 function interceptUserInput (onInput) {
-  window.addEventListener('mousemove', onInput, { passive: false })
-  window.addEventListener('pointermove', onInput, { passive: false })
-  window.addEventListener('wheel', onInput, { passive: false })
-  window.addEventListener('scroll', onInput, { passive: false })
-  document.body.addEventListener('touchstart', onInput, { passive: false })
-
-  document.body.addEventListener('mousedown', onInput)
-  document.body.addEventListener('mouseup', onInput)
-  document.body.addEventListener('click', onInput)
-
-  document.body.addEventListener('keydown', onInput)
-  document.body.addEventListener('keyup', onInput)
-  document.body.addEventListener('keypress', onInput)
+  const events = ['pointerdown', 'touchstart', 'mousedown', 'mouseup', 'click', 'keydown', 'keypress', 'mousemove', 'wheel', 'scroll']
+  events.forEach(evt => {
+    window.addEventListener(evt, (e) => {
+      unlockAudio()
+      onInput(e)
+    }, { passive: false })
+  })
 }
 
 /**
