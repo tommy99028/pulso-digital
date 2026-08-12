@@ -1,108 +1,335 @@
-<!--
-    ptoszek.pl
-    Powered by Jaczup
-
-    My version (ptoszek.pl): 
-    - https://github.com/jaczup/ptoszek.pl
-    Original version (theannoyingsite.com): 
-    - https://github.com/feross/TheAnnoyingSite.com/
-
-    Contact with me: https://jaczup.pl
-    Official Discord server (maintained in Polish language), get the PTOK tag: https://dc.ptoszek.pl
-    
-    Contributors:
-      @jaczup - https://github.com/jaczup
-
-    Dziurwa był tutaj 🚎
--->
 <!doctype html>
-<html>
+<html lang="es">
 <head>
-  <title>Ptoszek</title>
+  <title>Tendencias 2026 — Lo mejor del mes</title>
   <meta charset='UTF-8'>
-    <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta property="og:title" content="Las 10 tendencias que van a explotar en 2026" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="Descubrí lo que se viene este año según los expertos. #3 te va a sorprender." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&h=630&fit=crop" />
+  <meta name="description" content="Las tendencias más importantes de 2026. Tecnología, cultura y lifestyle.">
+  <meta name="theme-color" content="#1a1a2e">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --card-bg: #ffffff;
+      --text: #1a1a2e;
+      --text-muted: #6b7280;
+      --accent: #e63946;
+      --accent-hover: #c1121f;
+      --border: #e5e7eb;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
     html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir,
-        'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial,
-        sans-serif;
-      overflow: hidden;
+      width: 100%; height: 100%; margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
-    .hello-message {
-      margin: 40px;
-      text-align: center;
-    }
+
     .logout-messages {
-      pointer-events: none;
-      color: red;
-      margin: 40px;
-      position: fixed;
-      top: 0;
-      left: 0;
+      pointer-events: none; color: red;
+      margin: 40px; position: fixed; top: 0; left: 0; z-index: 10000;
       text-shadow: 2px 2px #FFF, 4px 4px 10px #000;
     }
-    img {
-      width: 300px;
+
+    /* --- NAV --- */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(16px, 4vw, 48px);
     }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--text);
+      text-decoration: none; letter-spacing: -0.02em;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff !important;
+      padding: 8px 18px; border-radius: 8px; font-weight: 600;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent-hover); }
+
+    /* --- HERO --- */
+    .hero {
+      max-width: 1200px; margin: 0 auto;
+      padding: 48px clamp(16px, 4vw, 48px) 0;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+    }
+    .hero-main {
+      position: relative; border-radius: 16px; overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+    .hero-main img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .hero-main .overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 32px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    }
+    .hero-main .tag {
+      display: inline-block; background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 4px 10px; border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .hero-main h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3vw, 32px); color: #fff;
+      line-height: 1.25; margin-bottom: 8px;
+    }
+    .hero-main p { color: rgba(255,255,255,0.8); font-size: 14px; }
+
+    .hero-side { display: flex; flex-direction: column; gap: 20px; }
+    .hero-card {
+      position: relative; border-radius: 14px; overflow: hidden;
+      flex: 1;
+    }
+    .hero-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-card .overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    }
+    .hero-card .tag {
+      display: inline-block; background: var(--accent); color: #fff;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 3px 8px; border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .hero-card h3 {
+      font-size: 15px; color: #fff; line-height: 1.3; font-weight: 600;
+    }
+
+    /* --- SECTION --- */
+    .section {
+      max-width: 1200px; margin: 0 auto;
+      padding: 56px clamp(16px, 4vw, 48px) 0;
+    }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; font-weight: 700;
+    }
+    .section-link {
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* --- ARTICLE GRID --- */
+    .articles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .article-card {
+      background: var(--card-bg); border-radius: 14px;
+      overflow: hidden; box-shadow: var(--shadow);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .article-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .article-card img {
+      width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block;
+    }
+    .article-body { padding: 20px; }
+    .article-tag {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .article-body h3 {
+      font-size: 16px; font-weight: 700; line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .article-body p {
+      font-size: 13px; color: var(--text-muted); line-height: 1.55;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 14px; font-size: 12px; color: var(--text-muted);
+    }
+    .article-meta img {
+      width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+      aspect-ratio: 1;
+    }
+
+    /* --- FOOTER --- */
+    .footer {
+      max-width: 1200px; margin: 56px auto 0;
+      padding: 32px clamp(16px, 4vw, 48px);
+      border-top: 1px solid var(--border);
+      text-align: center; font-size: 13px; color: var(--text-muted);
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-side { flex-direction: row; }
+      .nav-links { display: none; }
+    }
+
+    /* --- blur animation (subtle) --- */
     @keyframes blurslowly {
-      0% {
-        filter: none;
-      }
-      92% {
-        filter: blur(0);
-      }
-      96% {
-        filter: blur(1px);
-      }
-      100% {
-        filter: blur(0);
-      }
+      0% { filter: none; }
+      92% { filter: blur(0); }
+      96% { filter: blur(0.5px); }
+      100% { filter: blur(0); }
     }
-    body {
-      animation-name: blurslowly;
-      animation-iteration-count: infinite;
-      animation-duration: 15s;
-      animation-play-state: running;
+    body.activated {
+      animation: blurslowly 15s infinite;
     }
   </style>
-  <link rel="icon" type="image/x-icon" href="media/images/ptok.jpg">
-
-  <meta property="og:title" content="Ptoszek" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ptoszek.pl" />
-  <meta property="og:image" content="https://ptoszek.pl/media/images/ptok.jpg" />
-  <meta property="og:description" content="Obejrzyj zdjęcia Ptaków za frytę!" />
-  <meta name="keywords" content="ptoszek, ptok, ptoszek.pl, ptok.pl">
-  <meta name="description" content="Obejrzyj zdjęcia Ptaków za frytę!">
-  <meta name="theme-color" content="#34eb7d">
 </head>
 <body>
 
-<noscript>Po coś tego JavaScript wyłączył bamboszu!</noscript>
-<template>
-  <div class='hello-message'>
-    <h1>Siemano kolano!</h1>
-    <h2>We no walnij 3 razy w spacje.</h2>
-    <h3>(albo kliknij w ptoszka)</h3>
-
-    <img src='media/images/intro.gif' alt='Cute ptok' />
+<!-- The page looks like a real magazine site -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">Pulso Digital</a>
+    <ul class="nav-links">
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Tecnología</a></li>
+      <li><a href="#">Cultura</a></li>
+      <li><a href="#">Lifestyle</a></li>
+      <li><a href="#" class="nav-cta">Suscribirme</a></li>
+    </ul>
   </div>
-  <div class='logout-messages'></div>
-</template>
+</nav>
 
-<script src='index.js'></script>   
+<div class="hero">
+  <div class="hero-grid">
+    <div class="hero-main">
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=900&h=560&fit=crop" alt="Oficina moderna">
+      <div class="overlay">
+        <span class="tag">Tendencias</span>
+        <h1>El futuro del trabajo remoto: lo que cambió y lo que viene</h1>
+        <p>5 min de lectura · Por Martín Álvarez</p>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="hero-card">
+        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=340&fit=crop" alt="Tecnología">
+        <div class="overlay">
+          <span class="tag">Tech</span>
+          <h3>IA generativa: las herramientas que ya están cambiando todo</h3>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=340&fit=crop" alt="Viajes">
+        <div class="overlay">
+          <span class="tag">Viajes</span>
+          <h3>10 destinos escondidos que tenés que conocer antes de 2027</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6S5388LRGM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Lo más leído</h2>
+    <a href="#" class="section-link">Ver todo →</a>
+  </div>
+  <div class="articles">
+    <div class="article-card">
+      <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&h=310&fit=crop" alt="Data">
+      <div class="article-body">
+        <div class="article-tag">Datos</div>
+        <h3>Cómo la analítica de datos está transformando las PyMEs</h3>
+        <p>Las pequeñas empresas que adoptan dashboards inteligentes están creciendo un 40% más rápido.</p>
+        <div class="article-meta">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="Avatar">
+          <span>Lucía Romero · 3 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="article-card">
+      <img src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=500&h=310&fit=crop" alt="Diseño">
+      <div class="article-body">
+        <div class="article-tag">Diseño</div>
+        <h3>Minimalismo radical: la estética que domina 2026</h3>
+        <p>Menos es más, pero con intención. Los diseñadores más influyentes explican por qué.</p>
+        <div class="article-meta">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" alt="Avatar">
+          <span>Diego Fuentes · 4 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="article-card">
+      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&h=310&fit=crop" alt="Cybersecurity">
+      <div class="article-body">
+        <div class="article-tag">Seguridad</div>
+        <h3>Tu contraseña ya no alcanza: lo que tenés que saber hoy</h3>
+        <p>Con los avances en computación cuántica, la seguridad digital necesita un nuevo enfoque.</p>
+        <div class="article-meta">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop" alt="Avatar">
+          <span>Ana Gutiérrez · 6 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="article-card">
+      <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&h=310&fit=crop" alt="Coding">
+      <div class="article-body">
+        <div class="article-tag">Dev</div>
+        <h3>Los 5 lenguajes que más van a crecer según Stack Overflow</h3>
+        <p>Rust, Go y una sorpresa que pocos esperaban. Los datos no mienten.</p>
+        <div class="article-meta">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop" alt="Avatar">
+          <span>Tomás Herrera · 5 min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  gtag('config', 'G-6S5388LRGM');
-</script>
+<footer class="footer">
+  © 2026 Pulso Digital. Todos los derechos reservados.
+</footer>
+
+<div class='logout-messages'></div>
+
+<script src='index.js'></script>
 
 </body>
 </html>
