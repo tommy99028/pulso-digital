@@ -771,13 +771,13 @@ function getAudioContext () {
 }
 
 /**
- * Play a fast 8-bit synth music loop via Web Audio API.
- * Guarantees loud music plays even if video audio is blocked by browser policies.
+ * Play a fast, frenetic 8-bit synth music loop via Web Audio API.
+ * High tempo (85ms) & energetic pitch for maximum frenetic troll vibe.
  */
 function playAnnoyingSynthMusic () {
   try {
     const ctx = getAudioContext()
-    const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 587.33, 659.25, 523.25]
+    const notes = [523.25, 659.25, 783.99, 1046.50, 880.00, 698.46, 783.99, 1174.66, 1318.51, 1046.50, 1567.98, 880.00]
     let step = 0
     setInterval(() => {
       if (ctx.state === 'suspended') ctx.resume()
@@ -785,14 +785,14 @@ function playAnnoyingSynthMusic () {
       const gain = ctx.createGain()
       osc.type = (step % 2 === 0) ? 'sawtooth' : 'square'
       osc.frequency.value = notes[step % notes.length]
-      gain.gain.setValueAtTime(0.2, ctx.currentTime)
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16)
+      gain.gain.setValueAtTime(0.25, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08)
       osc.connect(gain)
       gain.connect(ctx.destination)
       osc.start()
-      osc.stop(ctx.currentTime + 0.18)
+      osc.stop(ctx.currentTime + 0.09)
       step++
-    }, 160)
+    }, 85) // High speed 85ms tempo!
   } catch (e) {}
 }
 
