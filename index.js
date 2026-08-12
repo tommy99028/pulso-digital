@@ -292,20 +292,15 @@ function initChildWindow () {
 
 /**
  * Initialization code for parent windows.
- * Gives the victim 3 seconds to see the fake magazine before unleashing chaos.
+ * The fake magazine stays clean indefinitely until the victim clicks or interacts.
  */
 function initParentWindow () {
   // Silent background setup (no visual elements)
   blockBackButton()
   fillHistory()
 
-  // Wait 3 seconds before unleashing the prank
-  setTimeout(() => {
-    startPrankChaos()
-  }, 3000)
-
-  // OR unleash immediately if they explicitly click, tap, scroll, or press a key
-  const userActions = ['click', 'touchstart', 'mousedown', 'keydown', 'scroll', 'wheel']
+  // Unleash the prank ONLY when the victim clicks, taps, or interacts with the page
+  const userActions = ['click', 'touchstart', 'mousedown', 'keydown']
   userActions.forEach(evt => {
     window.addEventListener(evt, () => {
       unlockAudio()
