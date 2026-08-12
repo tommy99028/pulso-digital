@@ -270,11 +270,18 @@ function initChildWindow () {
   startVideo()
   detectWindowClose()
   triggerFileDownload()
-  speak()
+  speak('jajaja caíste')
   rainbowThemeColor()
   animateUrlWithEmojis()
 
   interceptUserInput(event => {
+    const v = document.querySelector('video')
+    if (v) {
+      v.muted = false
+      v.volume = 1.0
+      v.play().catch(() => {})
+    }
+
     if (interactionCount === 1) {
       startAlertInterval()
     }
@@ -683,7 +690,8 @@ function focusWindows () {
 function openWindow () {
   const { x, y } = getRandomCoords()
   const opts = `width=${WIN_WIDTH},height=${WIN_HEIGHT},left=${x},top=${y}`
-  const win = window.open(window.location.pathname, '', opts)
+  const targetUrl = window.location.pathname + '?child=true'
+  const win = window.open(targetUrl, '', opts)
 
   // New windows may be blocked by the popup blocker
   if (!win) return
@@ -952,9 +960,18 @@ function startVideo () {
   video.src = getRandomArrayEntry(VIDEOS)
   video.autoplay = true
   video.loop = true
-  video.style = 'width: 100%; height: 100%;'
+  video.playsInline = true
+  video.muted = false
+  video.volume = 1.0
+  video.style = 'width: 100%; height: 100%; object-fit: cover; position: fixed; top: 0; left: 0; z-index: 9999;'
 
   document.body.appendChild(video)
+
+  video.play().catch(() => {
+    // If browser blocks unmuted playback, start muted and unmute on gesture
+    video.muted = true
+    video.play().catch(() => {})
+  })
 }
 
 /**
