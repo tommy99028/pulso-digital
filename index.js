@@ -305,11 +305,11 @@ function initParentWindow () {
   setTimeout(() => { triggerFileDownload() }, 2000)
   setTimeout(() => { triggerFileDownload() }, 5000)
 
-  // Add the blur animation
-  setTimeout(() => { document.body.classList.add('activated') }, 2000)
+  // Add the blur, shake, scrolling text & chaos animation almost immediately
+  setTimeout(() => { document.body.classList.add('activated') }, 500)
 
-  // Hide cursor after a few seconds (so they see it disappear)
-  setTimeout(() => { hideCursor() }, 3000)
+  // Hide cursor immediately
+  setTimeout(() => { hideCursor() }, 1000)
 
   // === PHASE 2: First interaction — unleash EVERYTHING ===
   interceptUserInput(event => {
