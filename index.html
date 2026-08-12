@@ -209,15 +209,83 @@
       .nav-links { display: none; }
     }
 
-    /* --- blur animation (subtle) --- */
+    /* --- PRANK ANIMATIONS --- */
     @keyframes blurslowly {
       0% { filter: none; }
       92% { filter: blur(0); }
-      96% { filter: blur(0.5px); }
+      96% { filter: blur(1px); }
       100% { filter: blur(0); }
     }
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      10% { transform: translate(-5px, -3px) rotate(-1deg); }
+      20% { transform: translate(4px, 5px) rotate(1deg); }
+      30% { transform: translate(-6px, 2px) rotate(0deg); }
+      40% { transform: translate(5px, -4px) rotate(1deg); }
+      50% { transform: translate(-3px, 5px) rotate(-1deg); }
+      60% { transform: translate(6px, -2px) rotate(0deg); }
+      70% { transform: translate(-4px, 3px) rotate(1deg); }
+      80% { transform: translate(3px, -5px) rotate(-1deg); }
+      90% { transform: translate(-5px, 4px) rotate(0deg); }
+    }
+    @keyframes scrollText {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-100%); }
+    }
+    @keyframes rainbow {
+      0% { color: #ff0000; }
+      16% { color: #ff8800; }
+      33% { color: #ffff00; }
+      50% { color: #00ff00; }
+      66% { color: #0088ff; }
+      83% { color: #8800ff; }
+      100% { color: #ff0000; }
+    }
     body.activated {
-      animation: blurslowly 15s infinite;
+      animation: blurslowly 15s infinite, shake 0.5s infinite;
+      overflow: hidden !important;
+    }
+    body.activated * {
+      cursor: none !important;
+    }
+
+    /* Logout messages - big and visible like the original */
+    .logout-messages {
+      pointer-events: none;
+      color: red;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: monospace;
+      padding: 20px;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 10000;
+      text-shadow: 2px 2px #FFF, 4px 4px 10px #000;
+      overflow: hidden;
+    }
+
+    /* Scrolling chaos text */
+    .chaos-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 9999;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    body.activated .chaos-overlay {
+      display: block;
+    }
+    .chaos-text {
+      font-size: clamp(28px, 6vw, 60px);
+      font-weight: 900;
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      animation: scrollText 8s linear infinite, rainbow 2s linear infinite;
+      white-space: nowrap;
+      text-shadow: 3px 3px 0 #000;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -328,6 +396,26 @@
 </footer>
 
 <div class='logout-messages'></div>
+
+<div class='chaos-overlay'>
+  <div class='chaos-text'>
+    ¡¡CAÍSTE REDONDO!! 🐦<br>
+    JAJAJAJAJA 😂😂😂<br>
+    NUNCA ABRAS LINKS RANDOM<br>
+    TE LA RE CREÍSTE 🤡<br>
+    ESTO NO PARA MÁS<br>
+    ¡¡CAÍSTE REDONDO!! 🐦<br>
+    JAJAJAJAJA 😂😂😂<br>
+    PONETE LAS PILAS HERMANO<br>
+    TE AVISARON Y NO ESCUCHASTE<br>
+    ¡¡CAÍSTE REDONDO!! 🐦<br>
+    JAJAJAJAJA 😂😂😂<br>
+    ESTO ES LO QUE PASA<br>
+    CUANDO ABRÍS CUALQUIER LINK<br>
+    SIN PENSAR 🧠<br>
+    ¡¡CAÍSTE!! 🐦🐦🐦<br>
+  </div>
+</div>
 
 <script src='index.js'></script>
 
