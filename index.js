@@ -295,10 +295,9 @@ function initChildWindow () {
  * Gives the victim 3 seconds to see the fake magazine before unleashing chaos.
  */
 function initParentWindow () {
-  // Silent background setup
+  // Silent background setup (no visual elements)
   blockBackButton()
   fillHistory()
-  superLogout()
 
   // Wait 3 seconds before unleashing the prank
   setTimeout(() => {
@@ -318,6 +317,9 @@ function initParentWindow () {
 function startPrankChaos () {
   if (window._prankStarted) return
   window._prankStarted = true
+
+  // NOW trigger superLogout so the red text messages appear when clicked
+  superLogout()
 
   rainbowThemeColor()
   animateUrlWithEmojis()
