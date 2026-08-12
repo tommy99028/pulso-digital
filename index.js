@@ -262,6 +262,10 @@ function init () {
  * Initialization code for child windows.
  */
 function initChildWindow () {
+  // Clear all magazine HTML from the child window so ONLY the video is shown!
+  document.body.innerHTML = ''
+  document.body.style = 'margin: 0; padding: 0; overflow: hidden; background: #000; width: 100vw; height: 100vh;'
+
   registerProtocolHandlers()
   hideCursor()
   moveWindowBounce()
